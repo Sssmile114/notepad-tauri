@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>记事本</title>
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <button id="btn-new" class="btn" title="新建 (Ctrl+N)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        <span>新建</span>
+      </button>
+      <button id="btn-open" class="btn" title="打开 (Ctrl+O)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14l1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H18a2 2 0 0 1 2 2v2"/></svg>
+        <span>打开</span>
+      </button>
+      <div class="recent-wrap">
+        <button id="btn-recent" class="btn" title="最近打开的文件">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>最近</span>
+        </button>
+        <div id="recent-menu" class="recent-menu hidden"></div>
+      </div>
+      <button id="btn-save" class="btn" title="保存 (Ctrl+S)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>保存</span>
+      </button>
+      <button id="btn-save-as" class="btn" title="另存为 (Ctrl+Shift+S)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><polyline points="9 15 12 18 15 15"/></svg>
+        <span>另存为</span>
+      </button>
+      <span class="spacer"></span>
+      <button id="btn-find" class="btn" title="查找/替换 (Ctrl+F)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>查找</span>
+      </button>
+      <button id="btn-theme" class="btn" title="深色/浅色主题">
+        <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="icon-sun" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <span id="theme-label">深色</span>
+      </button>
+      <button id="btn-top" class="btn toggle" title="窗口置顶 (Ctrl+T)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg>
+        <span id="top-label">置顶</span>
+      </button>
+    </header>
+
+    <div class="findbar hidden" id="findbar">
+      <input type="text" id="find-input" class="find-input" placeholder="查找…" />
+      <input type="text" id="replace-input" class="find-input" placeholder="替换为…" />
+      <button id="btn-find-next" class="btn">下一个</button>
+      <button id="btn-find-prev" class="btn">上一个</button>
+      <button id="btn-replace" class="btn">替换</button>
+      <button id="btn-replace-all" class="btn">全部替换</button>
+      <span id="find-status" class="find-status"></span>
+      <button id="btn-find-close" class="btn close-btn">×</button>
+    </div>
+
+    <div class="editor-wrap">
+      <div id="line-numbers" class="line-numbers"></div>
+      <textarea id="editor" class="editor" wrap="soft" spellcheck="false" placeholder="在此输入内容…"></textarea>
+    </div>
+
+    <footer class="statusbar">
+      <span id="cursor-pos">第 1 行，第 1 列</span>
+      <span class="sep">|</span>
+      <span id="line-count">共 1 行</span>
+      <span class="sep">|</span>
+      <span id="char-count">0 字</span>
+      <span class="sep">|</span>
+      <span id="enc-label">UTF-8</span>
+      <span class="spacer"></span>
+      <button id="btn-font-dec" class="btn mini" title="缩小字号 (Ctrl+-)">A-</button>
+      <button id="btn-font-inc" class="btn mini" title="放大字号 (Ctrl+=)">A+</button>
+    </footer>
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <p class="modal-text">文件有未保存的修改，是否保存？</p>
+      <div class="modal-actions">
+        <button id="modal-save" class="btn primary">保存并关闭</button>
+        <button id="modal-discard" class="btn">不保存</button>
+        <button id="modal-cancel" class="btn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
